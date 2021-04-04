@@ -28,7 +28,7 @@ Installation
 
 First you need to have PythonSDK_ installed. There are installation instructions on the PythonSDK repository and also on `the site <https://bl-sdk.github.io/>`_. It is quite simple: just extract the PythonSDK archive to ``Binaries/Win32`` in your Borderlands 2 folder. To check all is well, when launching the game you should have a Mods submenu on your menu with the mods that are provided by default.
 
-To add one of the mods provided here, download its archive from `releases <https://github.com/plu5/p-borderlands/releases/latest>`_ and extract the folder inside (which should be the mod name) into the PythonSDK Mods folder, which is in ``Binaries/Win32`` in your Borderlands 2 folder. If you have the game running, you will need to restart it before you’ll see the mod appearing on the Mods submenu. To enable it, select it in the Mods submenu and press :kbd:`Enter`.
+To add one of the mods provided here, download its archive from `releases <https://github.com/plu5/p-borderlands/releases/latest>`_ and extract the folder within it (which should be the mod name) into the PythonSDK Mods folder, which is in ``Binaries/Win32`` in your Borderlands 2 folder. If you have the game running, you will need to restart it before you’ll see the mod appearing on the Mods submenu. To enable it, select it in the Mods submenu and press :kbd:`Enter`.
 
 Alternatively, you can download everything -- `ZIP of latest <https://github.com/plu5/p-borderlands/archive/refs/heads/main.zip>`_ -- and extract the mod folders therein.
 
