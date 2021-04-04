@@ -1,0 +1,43 @@
+{
+  "defaults": {
+    "authors": "plu5",
+    "source": "https://github.com/plu5/p-borderlands/",
+    "issues": "https://github.com/plu5/p-borderlands/issues",
+    "versions": {
+      "1.0.0": "https://github.com/plu5/p-borderlands/releases/tag/v1.0.0"
+    },
+    "supports": [
+      "BL2"
+    ]
+  },
+  "mods": [
+    {
+      "name": "Sprint Adjuster",
+      "description": [
+        "- Change speed when sprinting, while preserving normal speed when not sprinting.\n",
+        "- Optionally set Air Control to allow better control in the air with the movement keys, to have a better chance of stopping yourself from flinging off a cliff for instance.",
+        "- Configurable keybinding to allow turning on and off on the fly."
+      ],
+      "tagline": "Change sprinting speed.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "1.0.0"
+    },
+    {
+      "name": "Exp Adjuster",
+      "description": [
+        "Adds sliders to adjust XP amounts:\n",
+        "- baserates for each mode,\n",
+        "- as well as multipliers based on level difference from killed enemies.\n",
+        "\n",
+        "By default all the values are set to what they are normally. Check Options -> Mods menu to adjust them."
+      ],
+      "tagline": "Sliders to adjust XP amounts on the fly.",
+      "types": [
+        "Gameplay"
+      ],
+      "latest": "1.0.0"
+    }
+  ]
+}
