@@ -9,7 +9,7 @@ Check the menu in Options -> Mods to control the values, and the menu in Options
 
 Updates on the fly, so you can be ingame and change settings from the menu.
 
-For installation instructions and other general information, look at the README of the `base directory <../>`_.
+For installation instructions and other general information, look at the README of the `base directory <https://github.com/plu5/p-borderlands>`_.
 
 Implementation notes
 --------------------
