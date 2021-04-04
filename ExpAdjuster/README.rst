@@ -10,7 +10,7 @@ By default all the values are set to what they are normally. Check Options -> Mo
 
 - TODO: Add ability to adjust mission xp
 
-For installation instructions and other general information, look at the README of the `base directory <..>`_.
+For installation instructions and other general information, look at the README of the `base directory <../>`_.
 
 Implementation notes
 --------------------

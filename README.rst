@@ -3,7 +3,7 @@ A few Borderlands 2 PythonSDK_ mods
 
 .. _PythonSDK: https://github.com/bl-sdk/PythonSDK
 
-.. contents:
+.. contents::
 
 `Sprint Adjuster <SprintAdjuster/>`_
 ------------------------------------
