@@ -14,7 +14,7 @@
       "name": "Sprint Adjuster",
       "description": [
         "- Change speed when sprinting, while preserving normal speed when not sprinting.\n",
-        "- Optionally set Air Control to allow better control in the air with the movement keys, to have a better chance of stopping yourself from flinging off a cliff for instance.",
+        "- Optionally set Air Control to allow better control in the air with the movement keys, to have a better chance of stopping yourself from flinging off a cliff for instance.\n",
         "- Configurable keybinding to allow turning on and off on the fly."
       ],
       "tagline": "Change sprinting speed.",
@@ -22,7 +22,7 @@
         "Utility"
       ],
       "latest": "1.0.0",
-      "source": "https://github.com/plu5/p-borderlands/SprintAdjuster/"
+      "source": "https://github.com/plu5/p-borderlands/blob/main/SprintAdjuster"
     },
     {
       "name": "Exp Adjuster",
@@ -38,7 +38,7 @@
         "Utility"
       ],
       "latest": "1.0.0",
-      "source": "https://github.com/plu5/p-borderlands/ExpAdjuster/"
+      "source": "https://github.com/plu5/p-borderlands/blob/main/ExpAdjuster"
     }
   ]
 }
