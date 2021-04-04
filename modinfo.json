@@ -1,7 +1,6 @@
 {
   "defaults": {
     "authors": "plu5",
-    "source": "https://github.com/plu5/p-borderlands/",
     "issues": "https://github.com/plu5/p-borderlands/issues",
     "versions": {
       "1.0.0": "https://github.com/plu5/p-borderlands/releases/tag/v1.0.0"
@@ -22,7 +21,8 @@
       "types": [
         "Gameplay"
       ],
-      "latest": "1.0.0"
+      "latest": "1.0.0",
+      "source": "https://github.com/plu5/p-borderlands/SprintAdjuster/"
     },
     {
       "name": "Exp Adjuster",
@@ -37,7 +37,8 @@
       "types": [
         "Gameplay"
       ],
-      "latest": "1.0.0"
+      "latest": "1.0.0",
+      "source": "https://github.com/plu5/p-borderlands/ExpAdjuster/"
     }
   ]
 }
