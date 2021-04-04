@@ -57,6 +57,7 @@ class SprintAdjuster(ModMenu.SDKMod):
     Name = "Sprint Adjuster"
     Author = "plu5"
     Version = "1.0"
+    Types = ModMenu.ModTypes.Utility
     Description = """Change speed when sprinting, while preserving normal\
  speed when not sprinting. Optionally set Air Control to allow better control\
  in the air with the movement keys, to have a better chance of stopping\

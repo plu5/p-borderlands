@@ -44,6 +44,7 @@ class ExpAdjuster(ModMenu.SDKMod):
     Name = "Exp Adjuster"
     Author = "plu5"
     Version = "1.0"
+    Types = ModMenu.ModTypes.Utility
     Description = """Adds sliders to adjust XP amounts: baserates for each\
  mode, as well as multipliers based on level difference from killed enemies.
 
