@@ -10,12 +10,23 @@ Open the configuration dialog by pressing C in the mod manager to check status a
 
 Check the menu in Options -> Mods to adjust how many backups to keep, and whether to delete old ones.
 
+`UserFeedback <https://bl-sdk.github.io/mods/UserFeedback/>`_ is required, make sure you remember to install that too.
+
 For installation instructions and other general information, look at the README of the `base directory <https://github.com/plu5/p-borderlands>`_.
 
 Dependencies
 ------------
 
 - `UserFeedback <https://bl-sdk.github.io/mods/UserFeedback/>`_
+
+Usage
+-----
+
+- On first enable, the paths configuration panel will pop up. There are some guesses made on where your SaveData folder might be. Status will tell you whether they are valid. Verify they are the paths you want or modify them as you see fit.
+- On subsequent launches, the mod will be enabled automatically and save a backup, and no action is required. The panel will not pop up again unless there is a problem with the paths. You can open it manually by pressing C in the mod manager.
+- By default, the number of backups to keep is set to 5. After this number is exceeded, the oldest one will be deleted. You can customise this behaviour in Options -> Mods.
+
+There is pretty good logging in this mod. You can check what’s going on by looking at the console or log (in ``/Binaries/Win32/python-sdk.log``).
 
 Implementation notes
 --------------------
@@ -31,6 +42,8 @@ Regardless of validity of guessed paths, upon first launch the user is greeted w
 The Configuration dialog was made using the very useful ``UserFeedback`` library.
 
 ``backup`` and ``file_threshold`` are two helper modules which do not rely on anything specific to Saves Backuper, and are quite standalone. The former contains the backup logic, and the latter the threshold logic; i.e. the deletion of old backups below a set threshold. This is done in quite a safe manner, as only files that match a certain filter will be deleted. The regex Saves Backuper uses is ``'^' + base_name + r'.*\.zip$'``, where ``base_name`` is the name of the directory backed up. This means that if you for some reason wanted to prevent a certain backup from being deleted, you could rename it to make it not match this regex; like add anything to the beginning of the name, for instance an underscore.
+
+Notable is that the 'backup to' path (``to_path``) (where backups are stored) is allowed to be inside the 'backup' path (``path``) (folder whose contents are backed up). ``backup`` checks for that special case and makes sure to skip any files inside the ``to_path``.
 
 There is also the module ``zip_extra_fields``, which again is quite standalone. ZIP files can contain extra fields to give more information about the files therein. The one I use for Saves Backuper backups is the NTFS Extra Field, which can be used to store creation, modification, and access times. Without this field, only modification time would be stored. You can see more information about ZIP extra fields `here <https://fossies.org/linux/unzip/proginfo/extrafld.txt>`_.
 

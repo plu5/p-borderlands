@@ -47,10 +47,17 @@
         "Back up the contents of your saves folder each time you launch the game.\n",
         "- You can set the number of backups that will be kept, to keep them below a certain threshold.\n",
         "- You can set which folder to back up and where to back up to.\n",
-        "\n",
-        "Open the configuration dialog by pressing C in the mod manager to check status and modify the paths.",
         "\n\n",
-        "Check the menu in Options -> Mods to adjust how many backups to keep, and whether to delete old ones."
+        "UserFeedback is required, make sure you remember to install that too.",
+        "\n\n",
+        "Usage:\n",
+        "- On first enable, the paths configuration panel will pop up. There are some guesses made on where your SaveData folder might be. Status will tell you whether they are valid. Verify they are the paths you want or modify them as you see fit.\n",
+        "- On subsequent launches, the mod will be enabled automatically and save a backup, and no action is required. The panel will not pop up again unless there is a problem with the paths. You can open it manually by pressing C in the mod manager.\n",
+        "- By default, the number of backups to keep is set to 5. After this number is exceeded, the oldest one will be deleted. You can customise this behaviour in Options -> Mods.\n",
+        "\n",
+        "There is pretty good logging in this mod. You can check what’s going on by looking at the console or log (in `/Binaries/Win32/python-sdk.log`).",
+        "\n\n",
+        "More information is available on the [README](https://github.com/plu5/p-borderlands/tree/main/SavesBackuper)."
       ],
       "tagline": "Back up the contents of your saves folder each time you launch the game.",
       "types": [
