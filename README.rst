@@ -38,7 +38,7 @@ To add one of the mods provided here, download its archive from `releases <https
 
 Alternatively, you can download everything -- `ZIP of latest <https://github.com/plu5/p-borderlands/archive/refs/heads/main.zip>`_ -- and extract the mod folders therein.
 
-(note, however, that SavesBackuper requires `UserFeedback<https://bl-sdk.github.io/mods/UserFeedback/>`_ which you will need to download and install separately)
+(note, however, that SavesBackuper requires `UserFeedback <https://bl-sdk.github.io/mods/UserFeedback/>`_ which you will need to download and install separately)
 
 To update, just get latest and follow the same steps, overwriting the old files.
 

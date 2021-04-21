@@ -15,7 +15,7 @@ For installation instructions and other general information, look at the README 
 Dependencies
 ------------
 
-- `UserFeedback<https://bl-sdk.github.io/mods/UserFeedback/>`_
+- `UserFeedback <https://bl-sdk.github.io/mods/UserFeedback/>`_
 
 Implementation notes
 --------------------
