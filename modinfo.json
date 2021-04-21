@@ -3,6 +3,7 @@
     "authors": "plu5",
     "issues": "https://github.com/plu5/p-borderlands/issues",
     "versions": {
+      "1.0.0 2021-04-21": "https://github.com/plu5/p-borderlands/releases/tag/v1.1.0",
       "1.0.0": "https://github.com/plu5/p-borderlands/releases/tag/v1.0.0"
     },
     "supports": [
@@ -39,6 +40,27 @@
       ],
       "latest": "1.0.0",
       "source": "https://github.com/plu5/p-borderlands/blob/main/ExpAdjuster"
+    },
+    {
+      "name": "Saves Backuper",
+      "description": [
+        "Back up the contents of your saves folder each time you launch the game.\n",
+        "- You can set the number of backups that will be kept, to keep them below a certain threshold.\n",
+        "- You can set which folder to back up and where to back up to.\n",
+        "\n",
+        "Open the configuration dialog by pressing C in the mod manager to check status and modify the paths.",
+        "\n\n",
+        "Check the menu in Options -> Mods to adjust how many backups to keep, and whether to delete old ones."
+      ],
+      "tagline": "Back up the contents of your saves folder each time you launch the game.",
+      "types": [
+        "Utility"
+      ],
+      "latest": "1.0.0 2021-04-21",
+      "source": "https://github.com/plu5/p-borderlands/blob/main/SavesBackuper",
+      "requirements": {
+        "UserFeedback": ">=1.5"
+      }
     }
   ]
 }

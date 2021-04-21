@@ -20,7 +20,13 @@ Adds sliders to adjust XP amounts:
 - baserates for each mode,
 - as well as multipliers based on level difference from killed enemies.
 
-By default all the values are set to what they are normally. Check Options -> Mods menu to adjust them.
+`Saves Backuper <SavesBackuper/>`_
+----------------------------------
+
+Back up the contents of your saves folder each time you launch the game.
+
+- You can set the number of backups that will be kept, to keep them below a certain threshold.
+- You can set which folder to back up and where to back up to.
 
 
 Installation
@@ -31,6 +37,8 @@ First you need to have PythonSDK_ installed. There are installation instructions
 To add one of the mods provided here, download its archive from `releases <https://github.com/plu5/p-borderlands/releases/latest>`_ and extract the folder within it (which should be the mod name) into the PythonSDK Mods folder, which is in ``Binaries/Win32`` in your Borderlands 2 folder. If you have the game running, you will need to restart it before you’ll see the mod appearing on the Mods submenu. To enable it, select it in the Mods submenu and press :kbd:`Enter`.
 
 Alternatively, you can download everything -- `ZIP of latest <https://github.com/plu5/p-borderlands/archive/refs/heads/main.zip>`_ -- and extract the mod folders therein.
+
+(note, however, that SavesBackuper requires `UserFeedback<https://bl-sdk.github.io/mods/UserFeedback/>`_ which you will need to download and install separately)
 
 To update, just get latest and follow the same steps, overwriting the old files.
 
