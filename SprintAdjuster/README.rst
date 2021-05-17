@@ -14,8 +14,25 @@ For installation instructions and other general information, look at the README 
 Implementation notes
 --------------------
 
-The way I do it is when player begins sprinting changing the ``GroundSpeed`` of the controller’s character class definition, then to update the actual values calling ``ApplyCharacterClassDefaults`` with the modified definition. When player stops sprinting, I do the same thing but with the old ``GroundSpeed`` value.
-
-I think a better way would be to simply add an attribute effect to PlayerClass.SprintSettings.AttributeEffects, but I have not worked out how to do that yet.
+I apply the speed by modifying the first attribute effect of ``SprintDefinition'GD_PlayerShared.Sprint.SprintDefinition_Default'``, which controls foot speed while sprinting. It seems to update your speed on the fly so there is no need to call any function after change as I used to have to do back in version 1.0 when I was modifying ``GroundSpeed`` of the character controller’s class definition.
 
 Air Control is set by modifying the ``AirControl`` property of the ``PlayerController``’s ``Pawn``. It is also possible to modify the global value ``PlayerAirControl`` in ``GD_Globals.General.Globals``, but the former way is better because it allows you to set it even when game is running and have it take effect. It does mean we need to have access to the Pawn first, which you do not have before it is initialised, so the function that sets it hooks into ``WillowGame.WillowPlayerController.SpawningProcessComplete``.
+
+Changelog
+---------
+
+1.1.0 - 2021-05-17
+^^^^^^^^^^^^^^^^^^
+
+To apply the speed, instead of adjusting the ground speed of the character class definition I am now modifying the first attribute effect of ``SprintDefinition'GD_PlayerShared.Sprint.SprintDefinition_Default'``, which controls foot speed while sprinting. The former approach was interfering with class skills and possibly other things.
+
+Since the new approach only affects the speed while sprinting, it only needs to be set once and there is no longer a need to have hooks on begin and end sprint, so they were removed.
+
+The scale of the speed slider in the options was also changed, since we are now modifying a different value whose scale is totally different.
+
+Also fixed a bug with the active toggle which was preventing air control from being set when toggling off and back on, which was caused by a syntax error (accidentally wrote ``AirControlSpinner`` instead of ``AirControlBoolean``).
+
+1.0.0 - 2021-04-04
+^^^^^^^^^^^^^^^^^^
+
+Initial release.

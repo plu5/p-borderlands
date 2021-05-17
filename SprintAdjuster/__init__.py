@@ -7,11 +7,12 @@ def _GetPlayerController():
 
 
 def setSpeed(value):
-    PC = _GetPlayerController()
-    if PC:
-        class_definition = PC.GetClassDefinition()
-        class_definition.GroundSpeed = value
-        PC.ApplyCharacterClassDefaults(PC.Pawn, class_definition)
+    sd = unrealsdk.FindObject(
+        "SprintDefinition",
+        "GD_PlayerShared.Sprint.SprintDefinition_Default")
+    foot_attr = sd.AttributeEffects[0]
+    foot_attr.BaseModifierValue.BaseValueScaleConstant = value
+    unrealsdk.Log(f"[{instance.Name}] Set Sprint Speed to {value}")
 
 
 def getNormalAirControl():
@@ -45,8 +46,10 @@ def toggleActive():
         instance.active = True
         text = "now active"
 
+        # Set user-defined speed
+        setSpeed(instance.SpeedSlider.CurrentValue)
         # Set user-defined Air Control
-        if instance.AirControlSpinner.CurrentValue is True:
+        if instance.AirControlBoolean.CurrentValue is True:
             setAirControl(instance.AirControlSlider.CurrentValue / 10)
             instance.air_control_modified = True
 
@@ -66,7 +69,7 @@ class SprintAdjuster(ModMenu.SDKMod):
 Check the menu in Options -> Mods to control the values, and the menu in\
  Options -> Keyboard / Mouse -> Modded Key Bindings to set a key to allow you\
  to activate and deactivate this mod on the fly."""
-    normal_speed = 440
+    normal_speed = 1
     speed_modified = False
     normal_air_control = getNormalAirControl()
     air_control_modified = False
@@ -84,12 +87,12 @@ Check the menu in Options -> Mods to control the values, and the menu in\
 
         self.SpeedSlider = ModMenu.Options.Slider(
             Caption="Speed",
-            Description="The value to set GroundSpeed to when sprinting. \
-Normally 440.",
-            StartingValue=1000,
+            Description="The value to set sprint speed to. 0 is the same speed\
+ as walking. Normally 1.",
+            StartingValue=10,
             MinValue=0,
-            MaxValue=5000,
-            Increment=10
+            MaxValue=50,
+            Increment=1
         )
 
         self.AirControlBoolean = ModMenu.Options.Boolean(
@@ -126,7 +129,7 @@ Normally ~0.1 (1). Ignored if '{self.AirControlBoolean.Caption}' is set to \
         ]
 
     def ModOptionChanged(self, option, new_value):
-        # Update Air Control value if related options changed.
+        # Update values if related options changed.
         # If AirControlBoolean changed
         if option == self.AirControlBoolean:
             if new_value is True:
@@ -138,17 +141,10 @@ Normally ~0.1 (1). Ignored if '{self.AirControlBoolean.Caption}' is set to \
         # If AirControlSlider changed
         elif option == self.AirControlSlider:
             setAirControl(new_value / 10)
-
-    @ModMenu.Hook("WillowGame.WillowPlayerController.BeginSprint")
-    def onBeginSprint(self, caller, function, params):
-        setSpeed(self.SpeedSlider.CurrentValue)
-        self.speed_modified = True
-        return True
-
-    @ModMenu.Hook("WillowGame.WillowPlayerController.EndSprint")
-    def onEndSprint(self, caller, function, params):
-        setSpeed(self.normal_speed)
-        return True
+        # If SpeedSlider changed
+        elif option == self.SpeedSlider:
+            setSpeed(new_value)
+            self.speed_modified = True
 
     @ModMenu.Hook("WillowGame.WillowPlayerController.SpawningProcessComplete")
     def onPawnAcquired(self, caller, function, params):
@@ -159,6 +155,18 @@ Normally ~0.1 (1). Ignored if '{self.AirControlBoolean.Caption}' is set to \
         elif self.air_control_modified:
             setAirControl(self.normal_air_control)
         return True
+
+    def Enable(self):
+        super().Enable()
+
+        # Apply initial speed value
+        self.ModOptionChanged(self.SpeedSlider, self.SpeedSlider.CurrentValue)
+
+    def Disable(self):
+        # Set speed back to normal (air control is per-instance so no need)
+        self.ModOptionChanged(self.SpeedSlider, self.normal_speed)
+
+        super().Disable()
 
 
 instance = SprintAdjuster()
