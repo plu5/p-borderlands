@@ -15,6 +15,8 @@ A few Borderlands 2 PythonSDK_ mods
 - Optionally set Air Control to allow better control in the air with the movement keys, to have a better chance of stopping yourself from flinging off a cliff for instance.
 - Configurable keybinding to allow turning on and off on the fly.
 
+→ `More information <SprintAdjuster/>`_
+
 `Exp Adjuster <ExpAdjuster/>`_
 ------------------------------
 
@@ -22,6 +24,8 @@ Adds sliders to adjust XP amounts:
 
 - baserates for each mode,
 - as well as multipliers based on level difference from killed enemies.
+
+→ `More information <ExpAdjuster/>`_
 
 `Saves Backuper <SavesBackuper/>`_
 ----------------------------------
@@ -31,6 +35,7 @@ Back up the contents of your saves folder each time you launch the game.
 - You can set the number of backups that will be kept, to keep them below a certain threshold.
 - You can set which folder to back up and where to back up to.
 
+→ `More information <SavesBackuper/>`_
 
 Installation
 ------------
