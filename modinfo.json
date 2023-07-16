@@ -3,9 +3,9 @@
     "authors": "plu5",
     "issues": "https://github.com/plu5/p-borderlands/issues",
     "versions": {
-      "1.1.0 2021-05-17": "https://github.com/plu5/p-borderlands/releases/tag/v1.1.1",
-      "1.0.0 2021-04-21": "https://github.com/plu5/p-borderlands/releases/tag/v1.1.0",
-      "1.0.0": "https://github.com/plu5/p-borderlands/releases/tag/v1.0.0"
+      "1.1.0 2021-05-17": "https://github.com/plu5/p-borderlands/releases/latest",
+      "1.0.0 2021-04-21": "https://github.com/plu5/p-borderlands/releases/latest",
+      "1.0.0 2021-04-05": "https://github.com/plu5/p-borderlands/releases/latest"
     },
     "supports": [
       "BL2"
@@ -39,7 +39,7 @@
       "types": [
         "Utility"
       ],
-      "latest": "1.0.0",
+      "latest": "1.0.0 2021-04-05",
       "source": "https://github.com/plu5/p-borderlands/blob/main/ExpAdjuster"
     },
     {
