@@ -111,7 +111,7 @@ WillowGame/SaveData"
 
         self.Status.Tip = f"{validities_str}\n\n{summary_str}"
 
-    def Show(self) -> None:
+    def init(self) -> None:
         # Make sure paths are up to date to current values on the mod
         self._updateOwnSaveDataPathVars(self.mod.SaveDataPath.CurrentValue)
         self._updateOwnBackupToPathVars(self.mod.BackupToPath.CurrentValue)
@@ -119,6 +119,8 @@ WillowGame/SaveData"
         # Update status string
         self.updateStatus()
 
+    def Show(self) -> None:
+        self.init()
         super().Show()
 
     def OnPress(self, button: Button) -> None:

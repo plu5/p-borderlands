@@ -94,7 +94,7 @@ Check the menu in Options -> Mods to adjust how many backups to keep, and\
     def Enable(self) -> None:
         super().Enable()
 
-        self.config.updateStatus()
+        self.config.init()
 
         # Optionally display config dialog
         if (
