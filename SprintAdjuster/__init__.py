@@ -2,10 +2,6 @@ import unrealsdk
 from Mods import ModMenu
 
 
-def _GetPlayerController():
-    return unrealsdk.GetEngine().GamePlayers[0].Actor
-
-
 def setSpeed(value):
     sd = unrealsdk.FindObject(
         "SprintDefinition",
@@ -15,51 +11,57 @@ def setSpeed(value):
     unrealsdk.Log(f"[{instance.Name}] Set Sprint Speed to {value}")
 
 
-def getNormalAirControl():
-    g = unrealsdk.FindObject("GlobalsDefinition", "GD_Globals.General.Globals")
-    return g.PlayerAirControl
+def getGlobals():
+    return unrealsdk.FindObject(
+        "GlobalsDefinition", "GD_Globals.General.Globals")
+
+
+def getAirControl():
+    return getGlobals().PlayerAirControl
 
 
 def setAirControl(value):
-    PC = _GetPlayerController()
-    if PC and PC.Pawn:
-        PC.Pawn.AirControl = value
-        unrealsdk.Log(f"[{instance.Name}] Set Air Control to {value}")
+    getGlobals().PlayerAirControl = value
+    unrealsdk.Log(f"[{instance.Name}] Set Air Control to {value}")
 
 
 def toggleActive():
     text = ""
     # Toggle off
     if instance.active:
-        ModMenu.HookManager.RemoveHooks(instance)
         instance.active = False
         text = "now inactive"
-
-        # Restore normal values of GroundSpeed and AirControl
-        if instance.speed_modified:
-            setSpeed(instance.normal_speed)
-        if instance.air_control_modified:
-            setAirControl(instance.normal_air_control)
+        instance.unapply()
     # Toggle on
     else:
-        ModMenu.HookManager.RegisterHooks(instance)
         instance.active = True
         text = "now active"
-
-        # Set user-defined speed
-        setSpeed(instance.SpeedSlider.CurrentValue)
-        # Set user-defined Air Control
-        if instance.AirControlBoolean.CurrentValue is True:
-            setAirControl(instance.AirControlSlider.CurrentValue / 10)
-            instance.air_control_modified = True
+        instance.apply()
 
     unrealsdk.Log(f"[{instance.Name}] {text}")
+
+
+class MessageField(ModMenu.Options.Field):
+    """
+    A field which displays in the options list but holds no value.
+    (Can't use ModMenu.Options.Field directly for this because it is abstract)
+
+    Attributes:
+        Caption: The name of the field.
+        Description: A short description of the field to show when hovering
+                     over it in the menu.
+        IsHidden: If the field is hidden from the options menu.
+    """
+    def __init__(self, Caption, Description="", IsHidden=False):
+        self.Caption = Caption
+        self.Description = Description
+        self.IsHidden = IsHidden
 
 
 class SprintAdjuster(ModMenu.SDKMod):
     Name = "Sprint Adjuster"
     Author = "plu5"
-    Version = "1.0"
+    Version = "2.0.0"
     Types = ModMenu.ModTypes.Utility
     Description = """Change speed when sprinting, while preserving normal\
  speed when not sprinting. Optionally set Air Control to allow better control\
@@ -71,7 +73,7 @@ Check the menu in Options -> Mods to control the values, and the menu in\
  to activate and deactivate this mod on the fly."""
     normal_speed = 1
     speed_modified = False
-    normal_air_control = getNormalAirControl()
+    normal_air_control = getAirControl()
     air_control_modified = False
     active = True
 
@@ -117,10 +119,17 @@ Normally ~0.1 (1). Ignored if '{self.AirControlBoolean.Caption}' is set to \
             Increment=1
         )
 
+        self.AirControlRespawnHint = MessageField(
+            Caption="Note: Requires respawn after",
+            Description="Modifying Air Control requires respawn to take \
+effect.",
+        )
+
         self.AirControlNested = ModMenu.Options.Nested(
             Caption="Air Control",
             Description="Configure Air Control values.",
-            Children=[self.AirControlBoolean, self.AirControlSlider],
+            Children=[self.AirControlBoolean, self.AirControlSlider,
+                      self.AirControlRespawnHint],
         )
 
         self.Options = [
@@ -128,43 +137,52 @@ Normally ~0.1 (1). Ignored if '{self.AirControlBoolean.Caption}' is set to \
             self.AirControlNested,
         ]
 
+    def apply(self, speed=True, air_control=True):
+        """Apply the set user-defined values of Speed and AirControl"""
+        if speed:
+            setSpeed(self.SpeedSlider.CurrentValue)
+            self.speed_modified = True
+        if air_control and self.AirControlBoolean.CurrentValue is True:
+            setAirControl(self.AirControlSlider.CurrentValue / 10)
+            self.air_control_modified = True
+
+    def unapply(self, speed=True, air_control=True):
+        """Restore normal values of Speed and AirControl"""
+        if speed and self.speed_modified:
+            setSpeed(self.normal_speed)
+            self.speed_modified = False
+        if air_control and self.air_control_modified:
+            setAirControl(self.normal_air_control)
+            self.air_control_modified = False
+
     def ModOptionChanged(self, option, new_value):
         # Update values if related options changed.
         # If AirControlBoolean changed
         if option == self.AirControlBoolean:
             if new_value is True:
-                setAirControl(self.AirControlSlider.CurrentValue / 10)
-                self.air_control_modified = True
+                self.apply(speed=False, air_control=True)
+            # If user turned off AirControlBoolean, restore normal Air Control
             else:
-                if self.air_control_modified:
-                    setAirControl(self.normal_air_control)
+                self.unapply(speed=False, air_control=True)
         # If AirControlSlider changed
-        elif option == self.AirControlSlider:
+        elif (option == self.AirControlSlider and
+              self.AirControlBoolean.CurrentValue is True):
             setAirControl(new_value / 10)
+            self.air_control_modified = True
         # If SpeedSlider changed
         elif option == self.SpeedSlider:
             setSpeed(new_value)
             self.speed_modified = True
 
-    @ModMenu.Hook("WillowGame.WillowPlayerController.SpawningProcessComplete")
-    def onPawnAcquired(self, caller, function, params):
-        if self.AirControlBoolean.CurrentValue is True:
-            setAirControl(self.AirControlSlider.CurrentValue / 10)
-            self.air_control_modified = True
-        # If user turned off AirControlBoolean, restore normal Air Control
-        elif self.air_control_modified:
-            setAirControl(self.normal_air_control)
-        return True
-
     def Enable(self):
         super().Enable()
 
-        # Apply initial speed value
-        self.ModOptionChanged(self.SpeedSlider, self.SpeedSlider.CurrentValue)
+        # Apply initial speed and air control values
+        self.apply()
 
     def Disable(self):
-        # Set speed back to normal (air control is per-instance so no need)
-        self.ModOptionChanged(self.SpeedSlider, self.normal_speed)
+        # Set speed and air control back to normal
+        self.unapply()
 
         super().Disable()
 
