@@ -60,6 +60,10 @@ def setMissionRewardsMultiplier(
             mission_definition.AlternativeReward, multiplier, reward_type)
 
 
+def unchanged(slider):
+    return slider.CurrentValue == slider.StartingValue
+
+
 class ExpAdjuster(ModMenu.SDKMod):
     Name = "Exp Adjuster"
     Author = "plu5"
@@ -152,13 +156,15 @@ By default all the values are set to what they are normally. Check Options ->\
         # Address initial values
         for option in [*self.BaserateNested.Children,
                        *self.LevelscaleNested.Children]:
-            self.ModOptionChanged(option, option.CurrentValue)
+            if not unchanged(option):
+                self.ModOptionChanged(option, option.CurrentValue)
 
     def Disable(self):
         # Set everything back to normal
         for option in [*self.BaserateNested.Children,
                        *self.LevelscaleNested.Children]:
-            self.ModOptionChanged(option, option.StartingValue)
+            if not unchanged(option):
+                self.ModOptionChanged(option, option.StartingValue)
 
         super().Disable()
 
@@ -171,10 +177,7 @@ By default all the values are set to what they are normally. Check Options ->\
                     # If playthrough is set, make sure the value of the
                     #  TVHM/UVHM baserate reflects the rate for the mode we’re
                     #  currently on
-                    PC = _GetPlayerController()
-                    playthrough_num = PC.GetCurrentPlaythrough()
-                    if playthrough_num:
-                        self.updateBaseratesBasedOnPlaythrough(playthrough_num)
+                    self.updateBaseratesBasedOnCurrentPlaythrough(new_value)
 
                 return
 
@@ -183,23 +186,28 @@ By default all the values are set to what they are normally. Check Options ->\
                 level_difference = int(designation[1])
                 which = 'higher' if designation[0] == 'H' else 'lower'
                 setExpLevelscale(level_difference, which, new_value / 100)
+                return
 
-    def updateBaseratesBasedOnPlaythrough(self, playthrough_num):
+    def updateBaseratesBasedOnCurrentPlaythrough(self, new_value=None):
         """Updates baserates of TVHM/UVHM depending on playthrough currently
  loaded. This is needed because TVHM and UVHM baserates are controlled by
  the same value in the `Init_EnemyExperience_PerPlaythrough' object."""
+        PC = _GetPlayerController()
+        playthrough_num = PC.GetCurrentPlaythrough()
+        unrealsdk.Log(f"[{instance.Name}] Current playthrough: "
+                      f"{playthrough_num}")
         if playthrough_num == 1:
-            setModeExpBaserate('TVHM',
-                               self.BaserateSliders['TVHM'].CurrentValue)
+            setModeExpBaserate(
+                'TVHM', new_value or self.BaserateSliders['TVHM'].CurrentValue)
         elif playthrough_num == 2:
-            setModeExpBaserate('UVHM',
-                               self.BaserateSliders['UVHM'].CurrentValue)
+            setModeExpBaserate(
+                'UVHM', new_value or self.BaserateSliders['UVHM'].CurrentValue)
 
     @ModMenu.Hook("WillowGame.WillowPlayerController.SpawningProcessComplete")
     def onSpawn(self, caller, function, params):
-        PC = _GetPlayerController()
-        playthrough_num = PC.GetCurrentPlaythrough()
-        self.updateBaseratesBasedOnPlaythrough(playthrough_num)
+        if not (unchanged(self.BaserateSliders['TVHM']) and unchanged(
+                self.BaserateSliders['UVHM'])):
+            self.updateBaseratesBasedOnCurrentPlaythrough()
 
         return True
 
@@ -208,6 +216,8 @@ By default all the values are set to what they are normally. Check Options ->\
     def onMissionRewards(self, caller, function, params):
         if params and params.Mission:
             for reward_type, slider in self.MissionSliders.items():
+                if unchanged(slider):
+                    break
                 val = slider.CurrentValue / 100
                 setMissionRewardsMultiplier(params.Mission, val, reward_type)
                 unrealsdk.Log(f"[{instance.Name}] Multiplied mission "
