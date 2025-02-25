@@ -40,13 +40,34 @@ def setExpLevelscale(level_difference, which, new_scale):
  {new_scale}")
 
 
+def setRewardsMultipier(
+        rewards_object, multiplier, reward_type='exp'):
+    r = rewards_object
+    if reward_type == 'exp':
+        r.ExperienceRewardPercentage.BaseValueScaleConstant = multiplier
+    elif reward_type == 'credits':
+        r.CreditRewardMultiplier.BaseValueScaleConstant = multiplier
+    elif reward_type == 'other':
+        r.OtherCurrencyReward.BaseValueScaleConstant = multiplier
+
+
+def setMissionRewardsMultiplier(
+        mission_definition, multiplier, reward_type='exp'):
+    if mission_definition.Reward:
+        setRewardsMultipier(mission_definition.Reward, multiplier, reward_type)
+    if mission_definition.AlternativeReward:
+        setRewardsMultipier(
+            mission_definition.AlternativeReward, multiplier, reward_type)
+
+
 class ExpAdjuster(ModMenu.SDKMod):
     Name = "Exp Adjuster"
     Author = "plu5"
-    Version = "1.0"
+    Version = "1.1.0"
     Types = ModMenu.ModTypes.Utility
     Description = """Adds sliders to adjust XP amounts: baserates for each\
- mode, as well as multipliers based on level difference from killed enemies.
+ mode, multipliers based on level difference from killed enemies, and\
+ multipliers for mission rewards.
 
 By default all the values are set to what they are normally. Check Options ->\
  Mods menu to adjust them."""
@@ -103,9 +124,26 @@ By default all the values are set to what they are normally. Check Options ->\
             Children=list(self.LevelscaleSliders.values()),
         )
 
+        def missionSlider(name):
+            return slider(f"{name} percentage multiplier", "Normally 100%.",
+                          100, 0, 10000, 10)
+
+        self.MissionSliders = {
+            'exp': missionSlider('Experience'),
+            'credits': missionSlider('Credits'),
+            'other': missionSlider('Other Currency'),
+        }
+
+        self.MissionNested = ModMenu.Options.Nested(
+            Caption="Mission Rewards",
+            Description="Configure mission rewards multipliers.",
+            Children=list(self.MissionSliders.values()),
+        )
+
         self.Options = [
             self.BaserateNested,
             self.LevelscaleNested,
+            self.MissionNested,
         ]
 
     def Enable(self):
@@ -163,6 +201,17 @@ By default all the values are set to what they are normally. Check Options ->\
         playthrough_num = PC.GetCurrentPlaythrough()
         self.updateBaseratesBasedOnPlaythrough(playthrough_num)
 
+        return True
+
+    @ModMenu.Hook(
+        "WillowGame.WillowPlayerController.ServerGrantMissionRewards")
+    def onMissionRewards(self, caller, function, params):
+        if params and params.Mission:
+            for reward_type, slider in self.MissionSliders.items():
+                val = slider.CurrentValue / 100
+                setMissionRewardsMultiplier(params.Mission, val, reward_type)
+                unrealsdk.Log(f"[{instance.Name}] Multiplied mission "
+                              f"{reward_type} x{val}")
         return True
 
 
