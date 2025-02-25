@@ -23,7 +23,8 @@ A few Borderlands 2 PythonSDK_ mods
 Adds sliders to adjust XP amounts:
 
 - baserates for each mode,
-- as well as multipliers based on level difference from killed enemies.
+- multipliers based on level difference from killed enemies, and
+- multipliers for mission rewards (experience, credits, other currency).
 
 → `More information <ExpAdjuster/>`_
 
